@@ -19,7 +19,7 @@ const FiscalLifecycleSim = () => {
   const [taxPressure, setTaxPressure] = useState(100);
   const [pensionLevel, setPensionLevel] = useState(100);
   const [educationSpend, setEducationSpend] = useState(100);
-  const [showControls, setShowControls] = useState(true); // Para plegar controles en móvil
+  const [showControls, setShowControls] = useState(true); 
 
   // --- GENERACIÓN DE DATOS ---
   const data = useMemo(() => {
@@ -87,7 +87,7 @@ const FiscalLifecycleSim = () => {
     if (active && payload && payload.length) {
       const d = payload[0].payload;
       return (
-        <div className="bg-white/95 backdrop-blur p-3 border border-gray-200 shadow-xl rounded-lg text-xs sm:text-sm">
+        <div className="bg-white/95 backdrop-blur p-3 border border-gray-200 shadow-xl rounded-lg text-xs sm:text-sm z-50">
           <p className="font-bold text-gray-800 mb-2 border-b pb-1">Edad: {label} años</p>
           <div className="space-y-1">
             <p className="text-blue-600 flex justify-between gap-4"><span>Pensiones:</span> <span>{formatMoney(d.pensiones)}</span></p>
@@ -106,13 +106,11 @@ const FiscalLifecycleSim = () => {
   };
 
   return (
-    // Cambiado h-screen por min-h-screen para permitir scroll en móviles
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-50 font-sans text-gray-800">
       
       {/* --- PANEL DE CONTROLES --- */}
       <div className="w-full md:w-80 bg-white border-b md:border-b-0 md:border-r border-gray-200 shadow-sm z-20 flex-shrink-0">
         
-        {/* Cabecera Móvil Plegable */}
         <div 
           className="p-4 flex items-center justify-between cursor-pointer md:cursor-default bg-blue-50 md:bg-white"
           onClick={() => window.innerWidth < 768 && setShowControls(!showControls)}
@@ -126,7 +124,6 @@ const FiscalLifecycleSim = () => {
           </div>
         </div>
 
-        {/* Contenido de Controles (Ocultable en móvil) */}
         <div className={`${showControls ? 'block' : 'hidden'} md:block p-6 pt-2 overflow-y-auto md:h-[calc(100vh-4rem)]`}>
           <div className="space-y-6">
             
@@ -200,19 +197,19 @@ const FiscalLifecycleSim = () => {
           <p className="text-gray-500 text-xs md:text-sm mt-1">Modelo NTA Interactivo</p>
         </div>
 
-        {/* Contenedor del gráfico con altura fija en móvil (400px) y flexible en escritorio */}
-        <div className="flex-1 w-full min-h-[400px] bg-white rounded-xl border border-gray-100 p-1 sm:p-4 shadow-sm relative">
+        {/* CORRECCIÓN AQUÍ: Usamos h-[400px] explícito en móvil, y flex-1 en escritorio */}
+        <div className="w-full h-[400px] md:h-auto md:flex-1 bg-white rounded-xl border border-gray-100 p-1 sm:p-4 shadow-sm relative">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={data}
-              margin={{ top: 20, right: 10, left: -20, bottom: 0 }} // Márgenes ajustados para móvil
+              margin={{ top: 20, right: 10, left: -20, bottom: 0 }}
               stackOffset="sign"
             >
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
               <XAxis 
                 dataKey="age" 
                 tick={{fontSize: 10}}
-                interval={10} // Menos números en el eje X para que no se amontonen
+                interval={10}
                 label={{ value: 'Edad', position: 'insideBottom', offset: -5, fontSize: 12 }} 
               />
               <YAxis 
